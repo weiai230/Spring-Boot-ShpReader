@@ -1,5 +1,37 @@
 package com.appleyk.geotools;
 
+import com.appleyk.entity.ShpGeometry;
+import org.geotools.api.data.DataStore;
+import org.geotools.api.data.DataStoreFinder;
+import org.geotools.api.data.FeatureSource;
+import org.geotools.api.data.FeatureWriter;
+import org.geotools.api.data.FileDataStore;
+import org.geotools.api.data.FileDataStoreFinder;
+import org.geotools.api.data.SimpleFeatureSource;
+import org.geotools.api.data.Transaction;
+import org.geotools.api.feature.Property;
+import org.geotools.api.feature.simple.SimpleFeature;
+import org.geotools.api.feature.simple.SimpleFeatureType;
+import org.geotools.api.style.Style;
+import org.geotools.data.postgis.PostgisNGDataStoreFactory;
+import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.data.shapefile.ShapefileDataStoreFactory;
+import org.geotools.data.shapefile.files.ShpFiles;
+import org.geotools.data.shapefile.shp.ShapefileReader;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.feature.FeatureIterator;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.map.FeatureLayer;
+import org.geotools.map.Layer;
+import org.geotools.map.MapContent;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.geotools.styling.SLD;
+import org.geotools.swing.JMapFrame;
+import org.geotools.swing.data.JFileDataStoreChooser;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.MultiPolygon;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,39 +47,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.geotools.data.DataStore;
-import org.geotools.data.DataStoreFinder;
-import org.geotools.data.FeatureSource;
-import org.geotools.data.FeatureWriter;
-import org.geotools.data.FileDataStore;
-import org.geotools.data.FileDataStoreFinder;
-import org.geotools.data.Transaction;
-import org.geotools.data.postgis.PostgisNGDataStoreFactory;
-import org.geotools.data.shapefile.ShapefileDataStore;
-import org.geotools.data.shapefile.ShapefileDataStoreFactory;
-import org.geotools.data.shapefile.files.ShpFiles;
-import org.geotools.data.shapefile.shp.ShapefileReader;
-import org.geotools.data.simple.SimpleFeatureSource;
-import org.geotools.feature.FeatureCollection;
-import org.geotools.feature.FeatureIterator;
-import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.geotools.map.FeatureLayer;
-import org.geotools.map.Layer;
-import org.geotools.map.MapContent;
-import org.geotools.referencing.crs.DefaultGeographicCRS;
-import org.geotools.styling.SLD;
-import org.geotools.styling.Style;
-import org.geotools.swing.JMapFrame;
-import org.geotools.swing.data.JFileDataStoreChooser;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.MultiPolygon;
-import org.opengis.feature.Property;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.appleyk.entity.ShpGeometry;
 
 public class GeoToolsUtils {
 
@@ -468,40 +467,40 @@ public class GeoToolsUtils {
 	
 	public static void main(String[] args) throws Exception {
 
-		// 1.利用Provider连接 空间数据库
-		if (!connDataBase("192.168.1.104", 5432, "postgres", "bluethink", "test")) {
-			System.out.println("连接postgresql数据库失败，请检查参数！");
-		}
-
-		System.out.println("===============连接postgis空间数据库==============");
-		connPostGis("postgis", "192.168.1.104", 5432, "test", "postgres", "bluethink");
-
-		System.out.println("===============读取shp文件并存储至postgresql数据库==============");	
-		// A.建筑物的shapefile，多边形 MULTIPOLYGON
-		// String path = "E:\\china-latest-free\\gis.osm_buildings_a_free_1.shp";
-
-		// B.路的shapefile，多线MULTILINESTRING
-		// String path = "E:\\china-latest-free\\gis.osm_roads_free_1.shp";
-
-		// C.建筑物的点坐标 以Point为主
-		// String path = "E:\\china-latest-free\\gis.osm_pois_free_1.shp";
-		
-		String path = "E:\\china-latest-free\\gis.osm_buildings_a_free_1.shp";
-		readSHP(path);
-		
-		System.out.println("===============读取图层geotable==============");
-		postGisReading("geotable");
-		
-		System.out.println("===============获取所有图层【所有空间几何信息表】==============");
-		getAllLayers();		
+//		// 1.利用Provider连接 空间数据库
+//		if (!connDataBase("192.168.1.104", 5432, "postgres", "bluethink", "test")) {
+//			System.out.println("连接postgresql数据库失败，请检查参数！");
+//		}
+//
+//		System.out.println("===============连接postgis空间数据库==============");
+//		connPostGis("postgis", "192.168.1.104", 5432, "test", "postgres", "bluethink");
+//
+//		System.out.println("===============读取shp文件并存储至postgresql数据库==============");
+//		// A.建筑物的shapefile，多边形 MULTIPOLYGON
+//		// String path = "E:\\china-latest-free\\gis.osm_buildings_a_free_1.shp";
+//
+//		// B.路的shapefile，多线MULTILINESTRING
+//		// String path = "E:\\china-latest-free\\gis.osm_roads_free_1.shp";
+//
+//		// C.建筑物的点坐标 以Point为主
+//		// String path = "E:\\china-latest-free\\gis.osm_pois_free_1.shp";
+//
+//		String path = "E:\\china-latest-free\\gis.osm_buildings_a_free_1.shp";
+//		readSHP(path);
+//
+//		System.out.println("===============读取图层geotable==============");
+//		postGisReading("geotable");
+//
+//		System.out.println("===============获取所有图层【所有空间几何信息表】==============");
+//		getAllLayers();
 		
 		System.out.println("===============创建自己的shp文件==============");
 		String MPolygonWKT="MULTIPOLYGON(((116.3824004 39.9032955,116.3824261 39.9034733,116.382512 39.9036313,116.382718 39.9038025,116.3831643 39.903954,116.383602 39.9040198,116.3840827 39.9040001,116.3844003 39.9039211,116.3846921 39.903763,116.3848552 39.9035787,116.3848981 39.9033548,116.3848037 39.9031244,116.3845719 39.9029071,116.3842286 39.9027754,116.3837823 39.9027227,116.3833789 39.9027095,116.383027 39.902749,116.3828038 39.9028346,116.382615 39.90294,116.3824776 39.9030717,116.3824004 39.9032955)))";
 		MultiPolygon multiPolygon = gCreator.createMulPolygonByWKT(MPolygonWKT);
 	    System.out.println(multiPolygon.getGeometryType());		
 		//首先得创建my这个目录
-	    writeSHP("C:/my/multipol.shp",multiPolygon);	
-	    System.out.println("===============打开shp文件==============");	
-		GeoToolsUtils.openShpFile();
+		writeSHP("F:/shpdata/multipol.shp", multiPolygon);
+		//System.out.println("===============打开shp文件==============");
+		//GeoToolsUtils.openShpFile();
 	}
 }
