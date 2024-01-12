@@ -144,7 +144,7 @@ public class ShpTest {
             List<SimpleFeature> features = new ArrayList<>();
 
             SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
-            String MPolygonWKT = "MULTIPOLYGON(((116.3824004 39.9032955,116.3824261 39.9034733,116.382718 39.9038025,116.3824761 39.9034733,116.3824004 39.9032955)))";
+            String MPolygonWKT = "MULTIPOLYGON(((116.3848981 39.9033548,116.3824261 39.9034733,116.382718 39.9038025,116.3824761 39.9034733,116.3828038 39.9028346,116.3848981 39.9033548)))";
             MultiPolygon multiPolygon = gCreator.createMulPolygonByWKT(MPolygonWKT);
             //注意字段添加顺序
             featureBuilder.add(multiPolygon);

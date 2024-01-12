@@ -35,7 +35,7 @@ import org.locationtech.jts.geom.MultiPolygon;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -140,7 +140,7 @@ public class GeoToolsUtils {
 		FileDataStore store = FileDataStoreFinder.getDataStore(file);
 
 		// 3.设置数据源的编码，防止中文乱码
-		((ShapefileDataStore) store).setCharset(Charset.forName("UTF-8"));
+		((ShapefileDataStore) store).setCharset(StandardCharsets.UTF_8);
 
 		/**
 		 * 使用FeatureSource管理要素数据 使用Style（SLD）管理样式 使用Layer管理显示
@@ -176,7 +176,7 @@ public class GeoToolsUtils {
 		// 一个数据存储实现，允许从Shapefiles读取和写入
 		ShapefileDataStore shpDataStore = null;
 		shpDataStore = new ShapefileDataStore(new File(path).toURI().toURL());
-		shpDataStore.setCharset(Charset.forName("UTF-8"));
+		shpDataStore.setCharset(StandardCharsets.UTF_8);
 		
 		// 获取这个数据存储保存的类型名称数组
 		// getTypeNames:获取所有地理图层
@@ -418,7 +418,7 @@ public class GeoToolsUtils {
 		ds.createSchema(tBuilder.buildFeatureType());
 		
 		// 11.设置编码
-		ds.setCharset(Charset.forName("UTF-8"));
+		ds.setCharset(StandardCharsets.UTF_8);
 		
 		
 		
